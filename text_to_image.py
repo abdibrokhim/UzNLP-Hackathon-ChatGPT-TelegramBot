@@ -18,6 +18,8 @@ os.environ['STABILITY_HOST'] = 'grpc.stability.ai:443'
 # https://beta.dreamstudio.ai/membership?tab=apiKeys
 
 class TextToImage:
+    PATH_TO_IMAGES = "images/"
+
     def __init__(self):
         pass
 
@@ -59,7 +61,7 @@ class TextToImage:
                         "Please modify the prompt and try again.")
                 if artifact.type == generation.ARTIFACT_IMAGE:
                     img = Image.open(io.BytesIO(artifact.binary))
-                    img.save(str(artifact.seed)+ ".png") # Save our generated images with their seed number as the filename.
+                    img.save(self.PATH_TO_IMAGES + str(artifact.seed)+ ".png") # Save our generated images with their seed number as the filename.
 
 
 
