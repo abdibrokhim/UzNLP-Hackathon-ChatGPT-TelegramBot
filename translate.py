@@ -11,6 +11,6 @@ class Translator:
         
 
 # Usage:
-translator = Translator()
-a = translator.translate("Dunyoni pishloq ko’rinishida tasvirla, 4k, yuqori format")
-print(a)
+# translator = Translator()
+# a = translator.translate("Dunyoni pishloq ko’rinishida tasvirla, 4k, yuqori format")
+# print(a)
