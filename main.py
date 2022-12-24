@@ -173,20 +173,20 @@ async def qa_audio_reciever(update: Update, context: ContextTypes):
 
     return QA_INPUT_AUDIO
 
-#Third step ---> IG Menu
-async def ig_text_reciever(update: Update, context: ContextTypes):
-    """Enters to QA WITH TEXT menu and asks input as text"""
+# #Third step ---> IG Menu
+# async def ig_text_reciever(update: Update, context: ContextTypes):
+#     """Enters to QA WITH TEXT menu and asks input as text"""
 
-    await update.message.reply_text("Type text in uzbek:")
+#     await update.message.reply_text("Describe image on text:")
 
-    return IG_INPUT_TEXT
+#     return IG_INPUT_TEXT
 
-async def ig_audio_reciever(update: Update, context: ContextTypes): 
-    """Enters to QA WITH TEXT menu and asks input as text"""
+# async def ig_audio_reciever(update: Update, context: ContextTypes): 
+#     """Enters to QA WITH TEXT menu and asks input as text"""
 
-    await update.message.reply_text("Describe an image on audio in Uzbek:")
+#     await update.message.reply_text("Describe an image on audio in Uzbek:")
 
-    return IG_INPUT_AUDIO
+#     return IG_INPUT_AUDIO
 
 #Fourth step ---> QA Menu
 async def qa_text_handler(update: Update, context: ContextTypes):
@@ -235,7 +235,6 @@ def main():
             ],
 
 
-
             QA_STATE: [
                 MessageHandler(filters.Regex("^QA TEXT$"), qa_with_text),
                 MessageHandler(filters.Regex("^QA AUDIO$"), qa_with_audio),
@@ -261,13 +260,14 @@ def main():
                 MessageHandler(filters.Regex("^Back 🔙$"), quest_answer),
             ],
             IG_START_WITH_TEXT: [
-                MessageHandler(filters.TEXT, ig_text_reciever),
+                MessageHandler(filters.TEXT, ig_with_text),
                 MessageHandler(filters.Regex("^Back 🔙$"), image_gen),
             ],
             IG_START_WITH_AUDIO: [
-                MessageHandler(filters.AUDIO, ig_text_reciever),
+                MessageHandler(filters.AUDIO, ig_with_audio),
                 MessageHandler(filters.Regex("^Back 🔙$"), image_gen),
             ],
+
             QA_INPUT_TEXT: [
                 MessageHandler(
                     filters.TEXT,
