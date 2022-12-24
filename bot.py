@@ -8,7 +8,7 @@ import time
 from copilot import Copilot
 from text_to_speech import TextToSpeech
 from text_to_image import TextToImage
-from speech_to_text import SpeechToText
+# from speech_to_text import SpeechToText
 from translate import Translator
 
 from dotenv import load_dotenv
@@ -28,6 +28,7 @@ from telegram.ext import (
     )
 
 
+TOKEN = '5975481962:AAENs4gmKt4VA2UGuRDcywmfIVcLjN6K-vA'
 (ENTRY_STATE, 
 QUESTION_STATE, 
 AUDIO_STATE,
@@ -184,7 +185,7 @@ async def pre_query_audio_handler(update: Update, context: ContextTypes):
 if __name__ == '__main__':
     load_dotenv()
 
-    application = Application.builder().token(os.getenv("TELEGRAM_BOT_TOKEN")).read_timeout(100).get_updates_read_timeout(100).build()
+    application = Application.builder().token(os.getenv(TOKEN)).read_timeout(100).get_updates_read_timeout(100).build()
 
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
