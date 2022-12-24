@@ -13,6 +13,7 @@ class TextToSpeech:
             with open(self.PATH_TO_AUDIO + f'audio{self.COUNTER}.mp3', "wb") as f:
                 f.write(response.content)
             self.COUNTER += 1
+            return self.PATH_TO_AUDIO + f'audio{self.COUNTER - 1}.mp3'
         except:
             print("Network error!")
 

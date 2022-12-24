@@ -3,11 +3,14 @@ import json
 from deep_translator import GoogleTranslator
 
 
+class Translator:
+    def translate(self, prompt):
+        translator = GoogleTranslator(source='auto', target='en')
+        r = translator.translate(prompt)
+        return r
+        
 
-#pip install deep_translator
-
-
-translator = GoogleTranslator(source='auto', target='en')
-
-
-print(translator.translate("Bizning darsimizga xush kelibsiz!"))
+# Usage:
+translator = Translator()
+a = translator.translate("Dunyoni pishloq ko’rinishida tasvirla, 4k, yuqori format")
+print(a)

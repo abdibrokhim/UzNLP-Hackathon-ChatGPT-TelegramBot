@@ -45,11 +45,11 @@ class Copilot:
 
 
 # Usage:
-copilot = Copilot()
-a = copilot.get_answer("Birinchi Jahon urishini kim boshlagan?")
+# copilot = Copilot()
+# a = copilot.get_answer("Birinchi Jahon urishini kim boshlagan?")
 
-print(a)
+# print(a)
 
 # Usage:
-tts = TextToSpeech()
-tts.to_speech(a)
+# tts = TextToSpeech()
+# tts.to_speech(a)

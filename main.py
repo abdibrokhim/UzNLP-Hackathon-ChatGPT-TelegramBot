@@ -7,6 +7,7 @@ from copilot import Copilot
 from text_to_speech import TextToSpeech
 from text_to_image import TextToImage
 from speech_to_text import SpeechToText
+from translate import Translator
 
 from dotenv import load_dotenv
 
@@ -24,7 +25,6 @@ from telegram.ext import (
     filters,)
 
 TOKEN = "5975481962:AAEJqH17EpW0OgFqcSvoWibG3KnkF_7JGP4"
-
 
 (
 ENTRY_STATE,
@@ -167,14 +167,25 @@ def _get_answer_from_copilot(prompt: str):
     return a
 
 
+def _translate_text(prompt: str):
+    """Translates text to english"""
+
+    translation = Translator()
+    responce = translation.translate(prompt, dest="en")
+
+    return responce
+
+
 def _convert_text_to_image(prompt: str):
     """Gets answer from stable diffusion"""
 
     tti = TextToImage()
-    tti.get_image(prompt)
+    img  = tti.get_image(prompt)
+    
+    return img
     
 
-async def _get_answer(update: Update, context: ContextTypes):
+async def _get_answer_ftxt(update: Update, context: ContextTypes):
     """Gets answer from copilot"""
     text = update.message.text
 
@@ -184,6 +195,27 @@ async def _get_answer(update: Update, context: ContextTypes):
 
     return IG_START_WITH_TEXT
 
+
+PATH_TO_IMAGES = "images/"
+async def _get_answer_fimg(update: Update, context: ContextTypes):
+    """Gets answer from copilot"""
+    text = update.message.text
+    try:
+        prompt = _get_answer_from_copilot(text)
+        if prompt:
+            trsl = _translate_text(prompt)
+            if trsl:
+                img_p = _convert_text_to_image(trsl)
+                if img_p:
+                    await update.messsage.reply_photo(photo=open(img_p, "rb"), 
+                    caption=prompt, 
+                    read_timeout=1000, 
+                    write_timeout=1000,
+                    )
+    except Exception as e:
+        print(e)
+
+    return IG_START_WITH_TEXT
 
 
 async def ig_with_audio(update: Update, context: ContextTypes):  #QA Menu ----> To ask input as audio

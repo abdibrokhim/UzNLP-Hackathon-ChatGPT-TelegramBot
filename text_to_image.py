@@ -23,7 +23,7 @@ class TextToImage:
     def __init__(self):
         pass
 
-    def get_image(self, prompt):
+    def to_image(self, prompt):
         # Set up our connection to the API.
         stability_api = client.StabilityInference(
             key=os.getenv("STABLE_DIFFUSION_API_KEY"), # API Key reference.
@@ -61,7 +61,10 @@ class TextToImage:
                         "Please modify the prompt and try again.")
                 if artifact.type == generation.ARTIFACT_IMAGE:
                     img = Image.open(io.BytesIO(artifact.binary))
-                    img.save(self.PATH_TO_IMAGES + str(artifact.seed)+ ".png") # Save our generated images with their seed number as the filename.
+                    img_path = self.PATH_TO_IMAGES + str(artifact.seed)+ ".png"
+                    img.save(img_path) # Save our generated images with their seed number as the filename.
+
+                    return img_path
 
 
 

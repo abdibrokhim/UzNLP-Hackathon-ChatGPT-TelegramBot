@@ -1,0 +1,2 @@
+class SpeechToText:
+    pass
