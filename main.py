@@ -1,3 +1,15 @@
+import os
+import json
+import requests
+import time
+
+from copilot import Copilot
+from text_to_speech import TextToSpeech
+from text_to_image import TextToImage
+from speech_to_text import SpeechToText
+
+from dotenv import load_dotenv
+
 from telegram import (
     ReplyKeyboardMarkup,
     Update,
@@ -12,7 +24,6 @@ from telegram.ext import (
     filters,)
 
 TOKEN = "5975481962:AAEJqH17EpW0OgFqcSvoWibG3KnkF_7JGP4"
-
 
 
 (
@@ -146,6 +157,35 @@ async def ig_with_text(update: Update, context: ContextTypes): #QA Menu ----> To
 
     return IG_START_WITH_TEXT
 
+
+def _get_answer_from_copilot(prompt: str):
+    """Gets answer from copilot"""
+    
+    copilot = Copilot()
+    a = copilot.get_answer(prompt)
+
+    return a
+
+
+def _convert_text_to_image(prompt: str):
+    """Gets answer from stable diffusion"""
+
+    tti = TextToImage()
+    tti.get_image(prompt)
+    
+
+async def _get_answer(update: Update, context: ContextTypes):
+    """Gets answer from copilot"""
+    text = update.message.text
+
+    result = _get_answer_from_copilot(text)
+
+    await update.message.reply_text(result)
+
+    return IG_START_WITH_TEXT
+
+
+
 async def ig_with_audio(update: Update, context: ContextTypes):  #QA Menu ----> To ask input as audio
     """Enters to QA AUDIO menu and asks an audio"""
 
@@ -192,10 +232,14 @@ async def qa_audio_reciever(update: Update, context: ContextTypes):
 async def qa_text_handler(update: Update, context: ContextTypes):
     """Holds input text"""
 
-    text = update.message.text.lower()
+    text = update.message.text
     context.user_data["choice"] = text
 
-    return QA_TEXT_HANDLER
+    result = _get_answer_from_copilot(text)
+
+    await update.message.reply_text(result)
+
+    return QA_INPUT_TEXT
 
 async def qa_audio_handler(update: Update, context: ContextTypes): 
     """Holds sended audio"""
@@ -234,62 +278,66 @@ def main():
                 MessageHandler(filters.Regex("^Image Generator$"),image_gen),
             ],
 
-
             QA_STATE: [
+                MessageHandler(filters.Regex("^Back 🔙$"), start),
                 MessageHandler(filters.Regex("^QA TEXT$"), qa_with_text),
                 MessageHandler(filters.Regex("^QA AUDIO$"), qa_with_audio),
-                MessageHandler(filters.Regex("^Back 🔙$"), start),
             ],
+
             IMAGE_STATE: [
+                MessageHandler(filters.Regex("^Back 🔙$"), start),
                 MessageHandler(filters.Regex("^IG TEXT$"), ig_with_text),
                 MessageHandler(
                     filters.Regex("^IG AUDIO$"), ig_with_audio
                 ),
+            ],
+
+            QA_START_WITH_TEXT: [
                 MessageHandler(filters.Regex("^Back 🔙$"), start),
-            ],
-
-
-           QA_START_WITH_TEXT: [
                 MessageHandler(filters.Regex("^Textda olish$"), qa_text_reciever),
                 MessageHandler(filters.Regex("^Audioda olish$"), qa_audio_reciever),
-                MessageHandler(filters.Regex("^Back 🔙$"), quest_answer),
             ],
+
             QA_START_WITH_AUDIO: [
+                MessageHandler(filters.Regex("^Back 🔙$"), start),
                 MessageHandler(filters.Regex("^Textda olish$"), qa_text_reciever),
                 MessageHandler(filters.Regex("^Audioda olish$"), qa_audio_reciever),
-                MessageHandler(filters.Regex("^Back 🔙$"), quest_answer),
             ],
+
             IG_START_WITH_TEXT: [
-                MessageHandler(filters.TEXT, ig_with_text),
-                MessageHandler(filters.Regex("^Back 🔙$"), image_gen),
+                MessageHandler(filters.Regex("^Back 🔙$"), start),
+                MessageHandler(filters.TEXT, _get_answer),
             ],
+
             IG_START_WITH_AUDIO: [
+                MessageHandler(filters.Regex("^Back 🔙$"), start),
                 MessageHandler(filters.AUDIO, ig_with_audio),
-                MessageHandler(filters.Regex("^Back 🔙$"), image_gen),
             ],
 
             QA_INPUT_TEXT: [
+                MessageHandler(filters.Regex("^Back 🔙$"), qa_with_text),
                 MessageHandler(
                     filters.TEXT,
                     qa_text_handler,
                 ),
-                MessageHandler(filters.Regex("^Back 🔙$"), start),
             ],
+
             QA_INPUT_AUDIO: [
+                MessageHandler(filters.Regex("^Back 🔙$"), qa_text_reciever),
                 MessageHandler(
                     filters.AUDIO,
                     qa_audio_handler,
                 ),
-                MessageHandler(filters.Regex("^Back 🔙$"), start),
             ],
         },
+
         fallbacks=[CommandHandler("start", start)],
         map_to_parent={END: ENTRY_STATE},
     )
 
-
-
     application.add_handler(conv_handler)
+
+    print("Bot is running...")
 
     # Run the bot until the user presses Ctrl-C
     application.run_polling()
