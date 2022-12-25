@@ -10,7 +10,7 @@ class Translator:
         return r
         
 
-# Usage:
+# # Usage:
 # translator = Translator()
-# a = translator.translate("Dunyoni pishloq ko’rinishida tasvirla, 4k, yuqori format")
+# a = translator.translate("Ko'chada ketayotgan yolg'iz chol")
 # print(a)

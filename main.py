@@ -24,8 +24,6 @@ from telegram.ext import (
     MessageHandler,
     filters,)
 
-TOKEN = "5975481962:AAEJqH17EpW0OgFqcSvoWibG3KnkF_7JGP4"
-
 (
 ENTRY_STATE,
 
@@ -301,7 +299,7 @@ async def ig_audio_handler(update: Update, context: ContextTypes):
 
 def main():
     """Run the bot"""
-    application = Application.builder().token(TOKEN).read_timeout(100).get_updates_read_timeout(100).build()
+    application = Application.builder().token("TELEGRAM_BOT_TOKEN").read_timeout(100).get_updates_read_timeout(100).build()
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler("start", start)],
         states={

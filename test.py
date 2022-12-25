@@ -33,7 +33,6 @@ from telegram.ext import (
 QUESTION_STATE, 
 AUDIO_STATE,) = range(3)
 
-TOKEN = "5975481962:AAENs4gmKt4VA2UGuRDcywmfIVcLjN6K-vA"
 
 def _generate_copilot(prompt: str):
     """Gets answer from copilot"""
@@ -134,7 +133,7 @@ async def pre_query_audio_handler(update: Update, context: ContextTypes):
 if __name__ == '__main__':
     load_dotenv()
 
-    application = Application.builder().token(os.getenv(TOKEN)).read_timeout(100).get_updates_read_timeout(100).build()
+    application = Application.builder().token(os.getenv("TELEGRAM_BOT_TOKEN")).read_timeout(100).get_updates_read_timeout(100).build()
 
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
