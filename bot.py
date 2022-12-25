@@ -28,7 +28,6 @@ from telegram.ext import (
     )
 
 
-TOKEN = '5975481962:AAENs4gmKt4VA2UGuRDcywmfIVcLjN6K-vA'
 (ENTRY_STATE, 
 QUESTION_STATE, 
 AUDIO_STATE,
@@ -154,8 +153,12 @@ async def pre_image_answer_handler(update: Update, context: ContextTypes):
     )
 
     question = update.message.text
+    print(question)
 
-    path = _to_image(question)
+    en_v = _translate(question)
+    print(en_v)
+
+    path = _to_image(en_v)
     context.user_data['image_path'] = _to_image
 
     await update.message.reply_photo(
@@ -185,7 +188,7 @@ async def pre_query_audio_handler(update: Update, context: ContextTypes):
 if __name__ == '__main__':
     load_dotenv()
 
-    application = Application.builder().token(os.getenv(TOKEN)).read_timeout(100).get_updates_read_timeout(100).build()
+    application = Application.builder().token(os.getenv("TELEGRAM_BOT_TOKEN")).read_timeout(100).get_updates_read_timeout(100).build()
 
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
