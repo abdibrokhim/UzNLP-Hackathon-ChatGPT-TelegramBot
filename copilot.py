@@ -22,7 +22,7 @@ class Copilot:
         
         load_dotenv()
 
-        openai.api_key = os.getenv("CHAT_GPT3_API_KEY1")
+        openai.api_key = "YOUR API KEY"
         response = openai.Completion.create(
             engine="text-davinci-003",
             prompt=prompt,

@@ -188,8 +188,8 @@ async def pre_query_audio_handler(update: Update, context: ContextTypes):
 if __name__ == '__main__':
     load_dotenv()
 
-    application = Application.builder().token(os.getenv("TELEGRAM_BOT_TOKEN")).read_timeout(100).get_updates_read_timeout(100).build()
-
+    application = Application.builder().token("YOUR TOKEN").read_timeout(100).get_updates_read_timeout(100).build()
+ 
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
         states={
